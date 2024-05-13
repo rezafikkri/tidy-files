@@ -2,12 +2,16 @@
 <html>
   <head>
     <meta charset="UTF-8" />
-    <title>Hello World!</title>
+    <title>Tidy Files</title>
 
   </head>
-  <body>
-    <h1>💖 Hello World!</h1>
-    <p>Welcome to your Electron application.</p>
+  <body class="h-screen flex justify-center items-center">
+    <div class="w-4/5">
+      <h1 class="text-2xl font-black text-center mb-5">Tidy Files</h1>
+      <input type="text" placeholder="Folder..." class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 cursor-not-allowed mb-4" value="Disabled readonly input" disabled readonly/>
+      <button type="button" class="text-white bg-gray-800 hover:bg-gray-900 focus:outline-none focus:ring-4 focus:ring-gray-300 font-medium rounded-lg text-sm px-5 py-2.5 mb-2 w-full">Choose Folder</button>
+      <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 w-full">Tiding Files</button>
+    </div>
     <script type="module" src="/src/renderer.js"></script>
   </body>
 </html>
