@@ -1,5 +1,6 @@
-const { app, BrowserWindow } = require('electron');
+const { app, BrowserWindow, ipcMain, dialog } = require('electron');
 const path = require('node:path');
+import { tidingFiles } from './tidy';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
 if (require('electron-squirrel-startup')) {
@@ -25,7 +26,17 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
+
+  // Service
+  ipcMain.handle('chooseFolder', () => {
+    return dialog.showOpenDialog(mainWindow, {
+      title: 'Choose folder to tiding',
+      properties: ['openDirectory'],
+    });
+  });
+
+  ipcMain.handle('tidingFiles', (_, baseFolder) => tidingFiles(baseFolder));
 };
 
 // This method will be called when Electron has finished
