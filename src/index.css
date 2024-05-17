@@ -5,7 +5,7 @@
 @layer base {
   @font-face {
     font-family: 'open_sans';
-    src: url('../fonts/Inter-VariableFont_slnt_wght.ttf') format('truetype');
+    src: url('../assets/fonts/Inter-VariableFont_slnt_wght.ttf') format('truetype');
   }
 }
 

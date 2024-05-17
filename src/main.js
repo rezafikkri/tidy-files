@@ -1,4 +1,10 @@
-const { app, BrowserWindow, ipcMain, dialog } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  ipcMain,
+  dialog,
+  nativeImage,
+} = require('electron');
 const path = require('node:path');
 import { tidingFiles } from './tidy';
 
@@ -8,8 +14,10 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
+  const appIcon = nativeImage.createFromPath('assets/img/icon.png');
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    icon: appIcon,
     width: 600,
     height: 300,
     webPreferences: {
@@ -26,9 +34,31 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  mainWindow.webContents.openDevTools();
+  // mainWindow.webContents.openDevTools();
 
-  // Service
+  // Create activation window
+  const activationWindow = new BrowserWindow({
+    parent: mainWindow,
+    modal: true,
+    width: 400,
+    height: 200,
+    minimizable: false,
+  });
+
+  activationWindow.webContents.openDevTools();
+  activationWindow.setMenuBarVisibility(false);
+
+  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+    activationWindow.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}/src/activation_window/`);
+  } else {
+    activationWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/src/activation_window/index.html`));
+  }
+
+  activationWindow.on('close', () => {
+    mainWindow.close();
+  });
+
+  // Main Service
   ipcMain.handle('chooseFolder', () => {
     return dialog.showOpenDialog(mainWindow, {
       title: 'Choose folder to tiding',

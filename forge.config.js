@@ -46,6 +46,10 @@ module.exports = {
             name: 'main_window',
             config: 'vite.renderer.config.mjs',
           },
+          {
+            name: 'activation_window',
+            config: 'vite.activation_renderer.config.mjs',
+          },
         ],
       },
     },
