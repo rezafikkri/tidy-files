@@ -40,6 +40,10 @@ module.exports = {
             entry: 'src/preload.js',
             config: 'vite.preload.config.mjs',
           },
+          {
+            entry: 'src/activation_window/aw-preload.js',
+            config: 'vite.preload.config.mjs',
+          },
         ],
         renderer: [
           {

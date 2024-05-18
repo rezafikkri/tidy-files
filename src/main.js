@@ -6,6 +6,7 @@ const {
   nativeImage,
 } = require('electron');
 const path = require('node:path');
+import { activate, isActivated } from './activation_window/activation';
 import { tidingFiles } from './tidy';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -36,27 +37,40 @@ const createWindow = () => {
   // Open the DevTools.
   // mainWindow.webContents.openDevTools();
 
-  // Create activation window
-  const activationWindow = new BrowserWindow({
-    parent: mainWindow,
-    modal: true,
-    width: 400,
-    height: 200,
-    minimizable: false,
-  });
+  const activationStatus = isActivated();
+  if (!activationStatus) {
+    // Create activation window
+    const activationWindow = new BrowserWindow({
+      parent: mainWindow,
+      modal: true,
+      width: 400,
+      height: 200,
+      minimizable: false,
+      webPreferences: {
+        preload: path.join(__dirname, 'aw-preload.js'),
+      },
+    });
 
-  activationWindow.webContents.openDevTools();
-  activationWindow.setMenuBarVisibility(false);
+    activationWindow.webContents.openDevTools();
+    activationWindow.setMenuBarVisibility(false);
 
-  if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-    activationWindow.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}/src/activation_window/`);
-  } else {
-    activationWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/src/activation_window/index.html`));
+    if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
+      activationWindow.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}/src/activation_window/`);
+    } else {
+      activationWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/src/activation_window/index.html`));
+    }
+
+    activationWindow.on('close', () => {
+      mainWindow.close();
+    });
+
+    // Activation Service
+    ipcMain.handle('active', (_, activationKey) => {
+      const response = activate(activationKey)
+      if (response.status === 'success') activationWindow.hide();
+      return response;
+    });
   }
-
-  activationWindow.on('close', () => {
-    mainWindow.close();
-  });
 
   // Main Service
   ipcMain.handle('chooseFolder', () => {
