@@ -19,10 +19,10 @@ module.exports = {
       name: '@electron-forge/maker-deb',
       config: {},
     },
-    {
-      name: '@electron-forge/maker-rpm',
-      config: {},
-    },
+    // {
+    //   name: '@electron-forge/maker-rpm',
+    //   config: {},
+    // },
   ],
   plugins: [
     {
@@ -41,7 +41,7 @@ module.exports = {
             config: 'vite.preload.config.mjs',
           },
           {
-            entry: 'src/activation_window/aw-preload.js',
+            entry: 'src/aw-preload.js',
             config: 'vite.preload.config.mjs',
           },
         ],
@@ -50,10 +50,10 @@ module.exports = {
             name: 'main_window',
             config: 'vite.renderer.config.mjs',
           },
-          {
-            name: 'activation_window',
-            config: 'vite.activation_renderer.config.mjs',
-          },
+          // {
+          //   name: 'activation_window',
+          //   config: 'vite.activation_renderer.config.mjs',
+          // },
         ],
       },
     },

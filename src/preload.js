@@ -5,4 +5,5 @@ const { contextBridge, ipcRenderer } = require('electron');
 contextBridge.exposeInMainWorld('tidy', {
   chooseFolder: () => ipcRenderer.invoke('chooseFolder'),
   tidingFiles: (baseFolder) => ipcRenderer.invoke('tidingFiles', baseFolder),
+  isActive: () => ipcRenderer.invoke('isActive'),
 });

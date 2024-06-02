@@ -1,0 +1,1 @@
+"use strict";const{contextBridge:o,ipcRenderer:e}=require("electron");o.exposeInMainWorld("tidy",{chooseFolder:()=>e.invoke("chooseFolder"),tidingFiles:i=>e.invoke("tidingFiles",i),isActive:()=>e.invoke("isActive")});

@@ -1,4 +1,4 @@
-import '../index.css';
+import '../src/index.css';
 
 const input = document.querySelector('input[type="text"]');
 const button = document.querySelector('button#active');

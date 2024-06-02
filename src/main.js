@@ -3,10 +3,9 @@ const {
   BrowserWindow,
   ipcMain,
   dialog,
-  nativeImage,
 } = require('electron');
 const path = require('node:path');
-import { activate, isActivated } from './activation_window/activation';
+import { activate, isActivated } from '../activation_window/activation';
 import { tidingFiles } from './tidy';
 
 // Handle creating/removing shortcuts on Windows when installing/uninstalling.
@@ -15,10 +14,8 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
-  const appIcon = nativeImage.createFromPath('assets/img/icon.png');
   // Create the browser window.
   const mainWindow = new BrowserWindow({
-    icon: appIcon,
     width: 600,
     height: 300,
     webPreferences: {
@@ -35,7 +32,7 @@ const createWindow = () => {
   }
 
   // Open the DevTools.
-  // mainWindow.webContents.openDevTools();
+  //mainWindow.webContents.openDevTools();
 
   const activationStatus = isActivated();
   if (!activationStatus) {
@@ -55,38 +52,41 @@ const createWindow = () => {
     activationWindow.setMenuBarVisibility(false);
 
     if (MAIN_WINDOW_VITE_DEV_SERVER_URL) {
-      activationWindow.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}/src/activation_window/`);
+      activationWindow.loadURL(`${MAIN_WINDOW_VITE_DEV_SERVER_URL}/activation_window.html`);
     } else {
-      activationWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/src/activation_window/index.html`));
+      activationWindow.loadFile(path.join(__dirname, `../renderer/${MAIN_WINDOW_VITE_NAME}/activation_window.html`));
     }
 
     activationWindow.on('close', () => {
       mainWindow.close();
     });
-
-    // Activation Service
-    ipcMain.handle('active', (_, activationKey) => {
-      const response = activate(activationKey)
-      if (response.status === 'success') activationWindow.hide();
-      return response;
-    });
   }
-
-  // Main Service
-  ipcMain.handle('chooseFolder', () => {
-    return dialog.showOpenDialog(mainWindow, {
-      title: 'Choose folder to tiding',
-      properties: ['openDirectory'],
-    });
-  });
-
-  ipcMain.handle('tidingFiles', (_, baseFolder) => tidingFiles(baseFolder));
 };
 
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
+  // Main Service
+  ipcMain.handle('chooseFolder', () => {
+    return dialog.showOpenDialog({
+      title: 'Choose folder to tiding',
+      properties: ['openDirectory'],
+    });
+  });
+  ipcMain.handle('tidingFiles', (_, baseFolder) => tidingFiles(baseFolder));
+
+  // Activation service
+  const activationStatus = isActivated();
+  if (!activationStatus) {
+    // Activation Service
+    ipcMain.handle('active', (_, activationKey) => {
+      const response = activate(activationKey)
+      if (response.status === 'success') BrowserWindow.getFocusedWindow().hide();
+      return response;
+    });
+  }
+
   createWindow();
 
   // On OS X it's common to re-create a window in the app when the
