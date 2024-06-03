@@ -3,6 +3,8 @@ const {
   BrowserWindow,
   ipcMain,
   dialog,
+  Notification,
+  nativeImage,
 } = require('electron');
 const path = require('node:path');
 import { activate, isActivated } from '../activation_window/activation';
@@ -14,8 +16,10 @@ if (require('electron-squirrel-startup')) {
 }
 
 const createWindow = () => {
+  const appIcon = path.join(process.cwd(), "public", "icon.png");
   // Create the browser window.
   const mainWindow = new BrowserWindow({
+    icon: appIcon,
     width: 600,
     height: 300,
     webPreferences: {
@@ -82,7 +86,15 @@ app.whenReady().then(() => {
     // Activation Service
     ipcMain.handle('active', (_, activationKey) => {
       const response = activate(activationKey)
-      if (response.status === 'success') BrowserWindow.getFocusedWindow().hide();
+      if (response.status === 'success') {
+        BrowserWindow.getFocusedWindow().hide();
+        // show notification
+        new Notification({
+          title: 'Activation success',
+          body: response.message,
+          icon: '../assets/img/icon.png',
+        }).show();
+      }
       return response;
     });
   }

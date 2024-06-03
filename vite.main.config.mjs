@@ -29,6 +29,7 @@ export default defineConfig((env) => {
       // Load the Node.js entry.
       mainFields: ['module', 'jsnext:main', 'jsnext'],
     },
+    assetsInclude: 'public/icon.png'
   };
 
   return mergeConfig(getBuildConfig(forgeEnv), config);

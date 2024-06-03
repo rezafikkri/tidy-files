@@ -12,8 +12,6 @@ button.addEventListener('click', async () => {
   if (response.status === 'invalid') {
     alertMessage.innerText = response.message;
     alert.classList.replace('hidden', 'flex');
-  } else if (response.status === 'success') {
-    new Notification('Activation Success', { body: response.message });
   }
 });
 

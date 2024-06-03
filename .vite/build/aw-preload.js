@@ -1,1 +1,0 @@
-"use strict";const{contextBridge:t,ipcRenderer:i}=require("electron");t.exposeInMainWorld("activation",{active:e=>i.invoke("active",e),closeActivationWindow:()=>i.invoke("closeActivationWindow"),isActived:()=>i.invoke("isActived")});

@@ -2,7 +2,8 @@
 module.exports = {
   content: [
     "./index.html",
-    "./src/**/*.{js,html}",
+    "./activation_window.html",
+    "./src/**/*.js",
   ],
   theme: {
     extend: {},
