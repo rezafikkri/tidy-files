@@ -4,7 +4,6 @@ const {
   ipcMain,
   dialog,
   Notification,
-  nativeImage,
 } = require('electron');
 const path = require('node:path');
 import { activate, isActivated } from '../activation_window/activation';

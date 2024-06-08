@@ -1,6 +1,8 @@
 const { FusesPlugin } = require('@electron-forge/plugin-fuses');
 const { FuseV1Options, FuseVersion } = require('@electron/fuses');
 const path = require('node:path');
+// using .env
+require('dotenv').config()
 
 module.exports = {
   packagerConfig: {
@@ -77,5 +79,18 @@ module.exports = {
       [FuseV1Options.EnableEmbeddedAsarIntegrityValidation]: true,
       [FuseV1Options.OnlyLoadAppFromAsar]: true,
     }),
+  ],
+  publishers: [
+    {
+      name: '@electron-forge/publisher-github',
+      config: {
+        repository: {
+          owner: 'rezafikkri',
+          name: 'tidy-files',
+        },
+        prerelease: false,
+        draf: true,
+      },
+    },
   ],
 };
