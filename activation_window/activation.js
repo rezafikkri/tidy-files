@@ -1,6 +1,6 @@
-const jwt = require('jsonwebtoken');
-const { readFileSync, writeFileSync } = require('node:fs');
-const needle = require('needle');
+import jwt from 'jsonwebtoken';
+import { readFileSync, writeFileSync } from 'node:fs';
+import needle from 'needle';
 
 const keys = '4da3a73068a119e38ebc1c663db07439897e805d37905a19aca5e431738ca855';
 
