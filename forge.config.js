@@ -7,9 +7,9 @@ require('dotenv').config()
 module.exports = {
   packagerConfig: {
     asar: true,
-    icon: path.join(process.cwd(), "public", "icon.png"),
+    icon: path.join(process.cwd(), "assets/img", "icon.png"),
     extraResource: [
-      path.join(process.cwd(), "public", "icon.png"),
+      path.join(process.cwd(), "assets/img", "icon.png"),
     ],
   },
   rebuildConfig: {},
@@ -26,7 +26,7 @@ module.exports = {
       name: '@electron-forge/maker-deb',
       config: {
         options: {
-          icon: path.join(process.cwd(), "public", "icon.png"),
+          icon: path.join(process.cwd(), "assets/img", "icon.png"),
         }
       },
     },
