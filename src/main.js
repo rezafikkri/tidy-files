@@ -14,8 +14,9 @@ if (require('electron-squirrel-startup')) {
   app.quit();
 }
 
+const appIcon = path.join(process.cwd(), 'assets/img', 'icon.png');
+
 const createWindow = () => {
-  const appIcon = path.join(process.cwd(), "public", "icon.png");
   // Create the browser window.
   const mainWindow = new BrowserWindow({
     icon: appIcon,
@@ -83,15 +84,15 @@ app.whenReady().then(() => {
   const activationStatus = isActivated();
   if (!activationStatus) {
     // Activation Service
-    ipcMain.handle('active', (_, activationKey) => {
-      const response = activate(activationKey)
+    ipcMain.handle('active', async (_, activationKey) => {
+      const response = await activate(activationKey);
       if (response.status === 'success') {
         BrowserWindow.getFocusedWindow().hide();
         // show notification
         new Notification({
           title: 'Activation success',
           body: response.message,
-          icon: '../assets/img/icon.png',
+          icon: appIcon,
         }).show();
       }
       return response;
